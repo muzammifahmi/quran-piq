@@ -523,6 +523,7 @@ export default function HomeGuruEvaluationPage() {
           loadedEvalKeyRef.current = evalKey;
           const rawErrors = matchedSantri.errors || EMPTY_ERROR_COUNTERS;
           setSurahAyat(matchedClass.materiTerakhir || matchedSantri.surahDibaca || "");
+          setTipeSesi(matchedExam.namaUjian || "Ujian Tilawah");
           setErrorCounters({
             ...EMPTY_ERROR_COUNTERS,
             ...rawErrors,
@@ -681,6 +682,9 @@ export default function HomeGuruEvaluationPage() {
     const rawErrors = santri.errors || EMPTY_ERROR_COUNTERS;
     setActiveSantriId(santri.id);
     setSurahAyat(selectedClass?.materiTerakhir || santri.surahDibaca || "");
+    if (selectedExam) {
+      setTipeSesi(selectedExam.namaUjian || "Ujian Tilawah");
+    }
     setErrorCounters({
       ...EMPTY_ERROR_COUNTERS,
       ...rawErrors,
@@ -1799,6 +1803,7 @@ export default function HomeGuruEvaluationPage() {
         {currentStep === "evaluation" && selectedClass && selectedExam && activeSantri && (
           <EvaluationFormView
             activeSantri={activeSantri}
+            selectedExam={selectedExam}
             surahAyat={surahAyat}
             setSurahAyat={setSurahAyat}
             tipeSesi={tipeSesi}

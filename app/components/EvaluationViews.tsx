@@ -797,10 +797,11 @@ export function StudentsStepView({
 
 interface EvaluationFormViewProps {
   activeSantri: SantriRecord;
+  selectedExam?: UjianSession;
   surahAyat: string;
   setSurahAyat: (val: string) => void;
-  tipeSesi: string;
-  setTipeSesi: (val: string) => void;
+  tipeSesi?: string;
+  setTipeSesi?: (val: string) => void;
   catatanUstadz: string;
   setCatatanUstadz: (val: string) => void;
   errorCounters: ErrorCounters;
@@ -809,7 +810,7 @@ interface EvaluationFormViewProps {
   setCurrentStep: (step: StepType) => void;
   handleAdjustError: (key: keyof ErrorCounters, delta: number) => void;
   handleToggleMakhorijLetter: (letter: string) => void;
-  handleAddQuickTag: (tag: string) => void;
+  handleAddQuickTag?: (tag: string) => void;
   handleResetCounters: () => void;
   handleSaveEvaluation: () => void;
 }
@@ -847,6 +848,7 @@ const HIJAIYAH_LETTERS = [
 
 export function EvaluationFormView({
   activeSantri,
+  selectedExam,
   surahAyat,
   setSurahAyat,
   tipeSesi,
@@ -863,6 +865,7 @@ export function EvaluationFormView({
   handleSaveEvaluation
 }: EvaluationFormViewProps) {
   const [isMakhorijOpen, setIsMakhorijOpen] = React.useState(false);
+  const examName = selectedExam?.namaUjian || tipeSesi || "Ujian Tilawah";
   const selectedMakhorijLetters = errorCounters.makhorijHuruf || [];
   const materiList: {
     no: number;
@@ -886,12 +889,9 @@ export function EvaluationFormView({
       {/* Top Navigation Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 pb-3 border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center justify-between sm:justify-start gap-2.5">
-          <div className="flex items-baseline gap-2 min-w-0">
-            <h1 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 tracking-tight truncate">
-              {activeSantri.nama}
-            </h1>
-            <span className="text-xs text-zinc-400 dark:text-zinc-500 tabular-nums shrink-0">{activeSantri.nis}</span>
-          </div>
+          <h1 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-zinc-100 tracking-tight truncate">
+            {activeSantri.nama}
+          </h1>
 
           <button
             onClick={() => setCurrentStep("students")}
@@ -947,19 +947,15 @@ export function EvaluationFormView({
 
           <div>
             <label className="block text-xs font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-              Kategori Sesi
+              Nama Ujian
             </label>
-            <select
-              value={tipeSesi}
-              onChange={(e) => setTipeSesi(e.target.value)}
-              className="w-full px-3 py-2 rounded-md border border-zinc-300 dark:border-zinc-700 text-xs focus:outline-none focus:ring-1 focus:ring-[#086288] focus:border-[#086288] transition-all bg-white dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200"
-            >
-              <option className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">Tasmi&apos; Ujian Resmi</option>
-              <option className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">Talaqqi Setoran Harian</option>
-              <option className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">Ujian Tengah Semester (UTS)</option>
-              <option className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">Ujian Akhir Semester (UAS)</option>
-              <option className="bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100">Murojaah Mandiri Terbimbing</option>
-            </select>
+            <input
+              type="text"
+              value={examName}
+              readOnly
+              title={examName}
+              className="w-full px-3 py-2 rounded-md border border-zinc-200 dark:border-zinc-700 text-xs font-medium text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-800/60 cursor-default focus:outline-none"
+            />
           </div>
         </div>
 
